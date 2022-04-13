@@ -1,4 +1,5 @@
 using IdentityDemo_Api.Models;
+using IdentityDemo_Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,7 @@ builder.Services.AddAuthentication(auth =>
                   ValidateIssuerSigningKey = true
              };
          });
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 var app = builder.Build();

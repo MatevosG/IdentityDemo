@@ -32,9 +32,21 @@ namespace IdentityDemo_Api.Services
             };
             var result = await _userManger.CreateAsync(identityUser, model.Password);
 
+            if (result.Succeeded)
+            {
+                return new UserManagerResponse
+                {
+                    IsSuccess = true,
+                    Message = "user success created"
+                };
+            }
 
-
-            throw new NotImplementedException();
+            return new UserManagerResponse
+            {
+                Errors = result.Errors.Select(x => x.Description),
+                IsSuccess = false,
+                Message = "user did not create"
+            };
         }
     }
 }
