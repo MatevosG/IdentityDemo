@@ -38,14 +38,15 @@ builder.Services.AddAuthentication(auth =>
              { 
                   ValidateIssuer = true,
                   ValidateAudience = true,
-                  ValidAudience = "http://ahmadmozafer.net",
-                  ValidIssuer = "http://ahmadmozafer.net",
+                  ValidAudience = builder.Configuration["AuthSettings : Audience"],
+                  ValidIssuer = builder.Configuration["AuthSettings : Issuer"],
                   RequireExpirationTime = true,
-                  IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is key")),
+                  IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings : Key"])),
                   ValidateIssuerSigningKey = true
              };
          });
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient<IMailServise, MailGridServise>();
 
 
 var app = builder.Build();
@@ -58,6 +59,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
