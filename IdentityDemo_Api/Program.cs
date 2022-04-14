@@ -34,15 +34,15 @@ builder.Services.AddAuthentication(auth =>
                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
          }).AddJwtBearer(options => {
-             options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters 
-             { 
-                  ValidateIssuer = true,
-                  ValidateAudience = true,
-                  ValidAudience = builder.Configuration["AuthSettings : Audience"],
-                  ValidIssuer = builder.Configuration["AuthSettings : Issuer"],
-                  RequireExpirationTime = true,
-                  IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings : Key"])),
-                  ValidateIssuerSigningKey = true
+             options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+             {
+                 ValidateIssuer = true,
+                 ValidateAudience = true,
+                 ValidAudience = builder.Configuration.GetConnectionString("AuthSettings:Audience")/*["AuthSettings:Audience"]*/,
+                 ValidIssuer = builder.Configuration.GetConnectionString("AuthSettings:Issuer")/*["AuthSettings:Issuer"]*/,
+                 RequireExpirationTime = true,
+                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetConnectionString("AuthSettings:Key")/*["AuthSettings:Key"]*/)),
+                 ValidateIssuerSigningKey = true
              };
          });
 builder.Services.AddScoped<IUserService, UserService>();

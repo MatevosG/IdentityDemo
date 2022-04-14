@@ -71,26 +71,26 @@ namespace IdentityDemo_Api.Services
                     Message = "Invalid password"
                 };
             var claims = new[]
-            {
-              new Claim("Email",model.Email),
-              new Claim(ClaimTypes.NameIdentifier,user.Id)
+             {
+                new Claim("Email", model.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings : Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication"/*_configuration["AuthSettings:Key"]*/));
 
             var token = new JwtSecurityToken(
-                issuer : _configuration["AuthSettings : Issuer"],
-                audience : _configuration["AuthSettings : Audience"],
-                claims : claims,
-                expires : DateTime.UtcNow.AddDays(10),
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-                );
+                issuer: "http://ahmadmozafer.net" /*_configuration["AuthSettings:Issuer"]*/,
+                audience: "http://ahmadmozafer.net" /*_configuration["AuthSettings:Audience"]*/,
+                claims: claims,
+                expires: DateTime.Now.AddDays(30),
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
+
             return new UserManagerResponse
             {
-                IsSuccess = true,
                 Message = tokenAsString,
+                IsSuccess = true,
                 ExpireData = token.ValidTo
             };
         }

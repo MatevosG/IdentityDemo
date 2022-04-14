@@ -35,9 +35,9 @@ namespace IdentityDemo_Api.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _userService.LuginUserAsync(model);
-                if(!result.IsSuccess)
+                if (!result.IsSuccess)
                     return BadRequest(result);
-                await _mailServise.SendEmailAsync(model.Email,"New login","<h1> Hey!,new login to your account npticed</h1><p>New login your account at"+DateTime.Now+"</p>");
+                await _mailServise.SendEmailAsync(model.Email, "New login", "<h1> Hey!,new login to your account npticed</h1><p>New login your account at" + DateTime.Now + "</p>");
                 return Ok(result);
             }
             return BadRequest("some properties are not valid");
