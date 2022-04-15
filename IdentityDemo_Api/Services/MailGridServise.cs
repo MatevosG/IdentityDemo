@@ -12,7 +12,7 @@ namespace IdentityDemo_Api.Services
         }
         public async Task SendEmailAsync(string toEmail, string subject, string content)
         {
-            var apiKey = _configuration["SendGridAPIKey"];
+            var apiKey = _configuration.GetValue<string>("SendGridAPIKey");
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("test@authdemo.com", "JWT Auth Demo");
             var to = new EmailAddress(toEmail);

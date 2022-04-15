@@ -38,13 +38,14 @@ builder.Services.AddAuthentication(auth =>
              {
                  ValidateIssuer = true,
                  ValidateAudience = true,
-                 ValidAudience = builder.Configuration.GetConnectionString("AuthSettings:Audience")/*["AuthSettings:Audience"]*/,
-                 ValidIssuer = builder.Configuration.GetConnectionString("AuthSettings:Issuer")/*["AuthSettings:Issuer"]*/,
+                 ValidAudience = builder.Configuration.GetValue<string>("AuthSettings:Audience")/*["AuthSettings:Audience"]*/,
+                 ValidIssuer = builder.Configuration.GetValue<string>("AuthSettings:Issuer")/*["AuthSettings:Issuer"]*/,
                  RequireExpirationTime = true,
-                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetConnectionString("AuthSettings:Key")/*["AuthSettings:Key"]*/)),
+                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("AuthSettings:Key")/*["AuthSettings:Key"]*/)),
                  ValidateIssuerSigningKey = true
              };
          });
+// Dependancy injection
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddTransient<IMailServise, MailGridServise>();
 

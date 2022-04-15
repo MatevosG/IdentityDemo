@@ -73,7 +73,7 @@ namespace IdentityDemo_Api.Services
             var claims = new[]
              {
                 new Claim("Email", model.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, "1"/*user.Id*/),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication"/*_configuration["AuthSettings:Key"]*/));
