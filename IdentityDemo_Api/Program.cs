@@ -47,7 +47,8 @@ builder.Services.AddAuthentication(auth =>
          });
 // Dependancy injection
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddTransient<IMailServise, MailGridServise>();
+//builder.Services.AddTransient<IMailService, MailGridService>();
+builder.Services.AddTransient<IMailService,GmailService >();
 
 
 var app = builder.Build();

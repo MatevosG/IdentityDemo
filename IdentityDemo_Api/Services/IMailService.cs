@@ -1,6 +1,6 @@
 ﻿namespace IdentityDemo_Api.Services
 {
-    public interface IMailServise
+    public interface IMailService
     {
         Task SendEmailAsync(string toEmail, string subject, string content);
     }
