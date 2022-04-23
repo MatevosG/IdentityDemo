@@ -39,7 +39,6 @@ namespace IdentityDemo_Api.Controllers
                 var result = await _userService.LuginUserAsync(model);
                 if (!result.IsSuccess)
                     return BadRequest(result);
-                await _mailServise.SendEmailAsync(model.Email, "New login", "<h1> Hey!,new login to your account npticed</h1><p>New login your account at" + DateTime.Now + "</p>");
                 return Ok(result);
             }
             return BadRequest("some properties are not valid");
@@ -61,7 +60,7 @@ namespace IdentityDemo_Api.Controllers
         }
 
         [HttpPost("ForgetPassword")]
-        public async Task<IActionResult> ForgetPassword(string email)
+        public async Task<IActionResult> ForgetPassword([FromQuery]string email)
         {
             if (string.IsNullOrEmpty(email))
                 return NotFound();

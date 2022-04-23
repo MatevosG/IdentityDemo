@@ -11,15 +11,14 @@ namespace IdentityDemo_Api.Services
             _configuration = configuration;
         }
 
-        //TODO: Move hard coded values to appsettings.json
         //TODO: calls   1 register 2 confirm 3 login 4 forgote 5 reset
         public async Task SendEmailAsync(string toEmail, string subject, string content)
         {
-            var apiKey = _configuration.GetValue<string>("SendGridAPIKey");
-
-            var fromAddress = new MailAddress("ctestmatos@gmail.com", "From mail service");
+            var from = _configuration.GetValue<string>("From");
+            var fromAddress = _configuration.GetValue<string>("FromAddress");
+            var fromAddressMail = new MailAddress(fromAddress, from);
             var toAddress = new MailAddress(toEmail, "To client");
-            const string fromPassword = "Ctestmatos12!";
+            var fromPassword = _configuration.GetValue<string>("FromMailPassword");
 
             var smtp = new SmtpClient
             {
@@ -28,9 +27,9 @@ namespace IdentityDemo_Api.Services
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                Credentials = new NetworkCredential(fromAddressMail.Address, fromPassword)
             };
-            using (var message = new MailMessage(fromAddress, toAddress)
+            using (var message = new MailMessage(fromAddressMail, toAddress)
             {
                 IsBodyHtml = true,
                 Subject = subject,

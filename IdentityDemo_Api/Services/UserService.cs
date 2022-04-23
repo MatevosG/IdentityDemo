@@ -41,6 +41,18 @@ namespace IdentityDemo_Api.Services
 
             if (result.Succeeded)
             {
+
+                //  sarqumenq token chaxumenq id i het yuareli mech uxarkumenq mail in
+                var confirmEmailToken = await _userManger.GenerateEmailConfirmationTokenAsync(identityUser);
+                // inkripta anum bayteri
+                var encodedEmailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
+                // saerquma string 
+                var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken) ;
+
+                string url = $"{_configuration["AppUrl"]}/api/auth/confirmemail?userid={identityUser.Id}&token={validEmailToken}";
+
+                await _mailService.SendEmailAsync(identityUser.Email, "Confirm your email", $"<h1>Welcome to Auth Demo</h1>" +
+                    $"<p>Please confirm your email by <a href='{url}'>Clicking here</a></p>");
                 return new UserManagerResponse
                 {
                     IsSuccess = true,
@@ -68,7 +80,7 @@ namespace IdentityDemo_Api.Services
                     Message = "There is no user with that email addres"
                 };
 
-            if (user.EmailConfirmed) 
+            if (!user.EmailConfirmed) 
                 return new UserManagerResponse
                 {
                     IsSuccess = false,
@@ -123,11 +135,14 @@ namespace IdentityDemo_Api.Services
             var result = await _userManger.ConfirmEmailAsync(user, normalToken);
 
             if (result.Succeeded)
+            {
+                user.EmailConfirmed = true;
                 return new UserManagerResponse
                 {
                     Message = "Email confirmed successfully!",
                     IsSuccess = true,
                 };
+            }
 
             return new UserManagerResponse
             {
